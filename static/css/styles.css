@@ -4043,6 +4043,19 @@ textarea.form-control-lg {
   display: block;
 }
 
+.tab-content img {
+  max-width: 30%;
+  margin-bottom: 11px;
+  border-radius: 7px;
+}
+
+.tab-content label {
+  font-size: 13px;
+  margin-bottom: 2px;
+  margin-top: 0.2rem;
+  margin-left: 5px;
+}
+
 .navbar {
   position: relative;
   display: flex;
@@ -11698,4 +11711,56 @@ body {
   width: 20px !important;
   font-size: 0.75rem;
   border-radius: 0.25rem !important;
+}
+
+.setting-filter {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+.setting-filter a button {
+  padding: .5rem 1.25rem;
+  margin-right: 0.25rem;
+  border-radius: 0.375rem !important;
+  border: 1px solid #F1F1F4;
+  text-align: center;
+  transition: 0.3s;
+  cursor: pointer;
+  background-color: white;
+  width: unset !important;
+  font-weight: 400;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.setting-filter a:hover button {
+  color: var(--primary);
+}
+
+.setting-filter a button:focus {
+  outline: none;
+  opacity: 0.8;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+
+.setting-filter a button.btn.active {
+  background-color: rgb(238 242 255 / 1);
+  color: var(--primary) !important;
+  border: none !important;
+}
+
+.text-transparent {
+  color: rgb(107 114 128 / 1);
+}
+
+.button-indigo-outline {
+  background-color: rgb(238 242 255 / 1) !important;
+  color: var(--primary) !important;
+  border: none !important;
 }

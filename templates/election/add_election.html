@@ -1,0 +1,110 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Add Election
+{% endblock %}
+
+{% block web_title %}
+    Add Election
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid p-3 px-4">
+            <h1 class="mt-4">Elections</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Add Election</li>
+            </ol>
+            <div class="row justify-content-center">
+                <form method="post" action="{% url 'create_election' %}" id="election_form">
+                        {% csrf_token %}
+                        {% include 'user/messages.html' %}
+                        {% if form.errors %}
+                            <ul>
+                                {% for field in form %}
+                                    {% for error in field.errors %}
+                                        <li class="text-danger">{{ error }}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <div class="form-floating mb-3">
+                            <input class="form-control" id="inputTitle" type="text" name="title" value="{{form.title.value|default_if_none:''}}"/>
+                            <label for="inputTitle">Title</label>
+                            <div id="title_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="inputDescription" name="description" placeholder="Description">
+                                {{form.description.value|default_if_none:''}}
+                            </textarea>
+                            <label for="inputDescription">Description</label>
+                            <div id="description_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="form-check-inline mb-3">
+                            <label class="form-check-label" for="inputStartDate">Start Date</label>
+                            <input class="form-control" id="inputStartDate" type="datetime-local" value="" name="start_date"/>
+                            <div id="start_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="form-check-inline mb-3">
+                            <label class="form-check-label" for="inputEndDate">End Date</label>
+                            <input class="form-control" id="inputEndDate" type="datetime-local" value="" name="end_date"/>
+                            <div id="end_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <input type="hidden" name="active_tab" value="tab1">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('election_form').addEventListener('submit', function(event) {
+            // Clear previous error messages
+            document.getElementById('title_validation').innerHTML = '';
+            document.getElementById('description_validation').innerHTML = '';
+            document.getElementById('start_validation').innerHTML = '';
+            document.getElementById('end_validation').innerHTML = '';
+
+            document.getElementById('inputTitle').classList.remove('border-danger');
+            document.getElementById('inputDescription').classList.remove('border-danger');
+            document.getElementById('inputStartDate').classList.remove('border-danger');
+            document.getElementById('inputEndDate').classList.remove('border-danger');
+
+            // Get form values
+            var title = document.getElementById('inputTitle').value;
+            var description = document.getElementById('inputDescription').value;
+            var start_date = document.getElementById('inputStartDate').value;
+            var end_date = document.getElementById('inputEndDate').value;
+
+            // Validate title
+            if (title.trim() === ''){
+                document.getElementById('title_validation').innerHTML = 'title is required !';
+                document.getElementById('inputTitle').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+
+            // Validate description
+            if (description.trim() === ''){
+                document.getElementById('description_validation').innerHTML = 'description is required !';
+                document.getElementById('inputDescription').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+
+            // Validate start date
+            if (start_date.trim() === ''){
+                document.getElementById('start_validation').innerHTML = 'start date is required !';
+                document.getElementById('inputStartDate').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+
+            // Validate end date
+            if (end_date.trim() === ''){
+                document.getElementById('end_validation').innerHTML = 'end date is required !';
+                document.getElementById('inputEndDate').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+        });
+    </script>
+{% endblock %}

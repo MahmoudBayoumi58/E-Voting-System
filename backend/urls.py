@@ -17,7 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+handler401 = 'user_app.views.error_401'
+handler403 = 'user_app.views.error_403'
+handler404 = 'user_app.views.error_404'
+handler500 = 'user_app.views.error_500'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('user/v1/', include('user_app.urls')),
+    path('vote/v1/', include('voting_app.urls')),
 ]

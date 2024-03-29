@@ -38,10 +38,10 @@ class Users(AbstractUser):
     USERNAME_FIELD = 'email'
     EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-    objects = CustomUserManager
+    objects = CustomUserManager()
 
     def __str__(self):
-        return self.email
+        return self.get_full_name()
 
 
 def get_default_expired_at():
@@ -56,3 +56,13 @@ class Activation(models.Model):
 
     def __str__(self):
         return self.activation_code
+
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    reset_code = models.UUIDField(default=uuid.uuid4, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    expired_at = models.DateTimeField(default=get_default_expired_at)
+
+    def __str__(self):
+        return self.reset_code
