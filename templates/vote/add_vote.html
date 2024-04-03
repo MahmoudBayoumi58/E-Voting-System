@@ -1,0 +1,97 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Add Vote
+{% endblock %}
+
+{% block web_title %}
+    Add Vote
+{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="container-fluid p-3 px-4">
+            <h1 class="mt-4">Votes</h1>
+            <ol class="breadcrumb mb-4">
+                <li class="breadcrumb-item active">Add Vote</li>
+            </ol>
+            <a href="#" onclick="window.history.back();" class="btn btn-dark">Back</a>
+            <div class="row justify-content-center mt-4">
+                <form method="post" action="{% url 'add_vote' %}" id="vote_form">
+                        {% csrf_token %}
+                        {% include 'user/messages.html' %}
+                        {% include 'base/errors.html' %}
+                        <div class="position-relative mt-1">
+                            <label for="inputVoter" class="form-label">Voter:</label>
+                            <select class="form-select" id="inputVoter" name="voter">
+                                {% for choice in form.voter.field.choices %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="voter_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="position-relative mt-1">
+                            <label for="inputElection" class="form-label">Election:</label>
+                            <select class="form-select" id="inputElection" name="election">
+                                {% for choice in form.election.field.choices %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="election_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="position-relative mt-1">
+                            <label for="inputCandidate" class="form-label">Candidate:</label>
+                            <select class="form-select" id="inputCandidate" name="candidate">
+                                {% for choice in form.candidate.field.choices %}
+                                    <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <div id="candidate_validation" style="transition: .3s;" class="text-danger"></div>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mt-4 mb-0">
+                            <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('vote_form').addEventListener('submit', function(event) {
+            // Clear previous error messages
+            document.getElementById('voter_validation').innerHTML = '';
+            document.getElementById('election_validation').innerHTML = '';
+            document.getElementById('candidate_validation').innerHTML = '';
+
+            document.getElementById('inputVoter').classList.remove('border-danger');
+            document.getElementById('inputElection').classList.remove('border-danger');
+            document.getElementById('inputCandidate').classList.remove('border-danger');
+
+            // Get form values
+            var voter = document.getElementById('inputVoter').value;
+            var election = document.getElementById('inputElection').value;
+            var candidate = document.getElementById('inputCandidate').value;
+
+            // Validate voter
+            if (voter.trim() === ''){
+                document.getElementById('voter_validation').innerHTML = 'voter is required !';
+                document.getElementById('inputVoter').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+
+            // Validate election
+            if (election.trim() === ''){
+                document.getElementById('election_validation').innerHTML = 'election is required !';
+                document.getElementById('inputElection').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+
+            // Validate candidate
+            if (candidate.trim() === ''){
+                document.getElementById('candidate_validation').innerHTML = 'candidate is required !';
+                document.getElementById('inputCandidate').classList.add('border-danger')
+                event.preventDefault() // Prevent form submission
+            }
+        });
+    </script>
+{% endblock %}

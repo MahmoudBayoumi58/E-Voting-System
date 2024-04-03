@@ -15,19 +15,12 @@
             <ol class="breadcrumb mb-4">
                 <li class="breadcrumb-item active">Edit Election</li>
             </ol>
-            <div class="row justify-content-center">
+            <a href="#" onclick="window.history.back();" class="btn btn-dark">Back</a>
+            <div class="row justify-content-center mt-4">
                 <form method="post" id="election_form">
                         {% csrf_token %}
                         {% include 'user/messages.html' %}
-                        {% if form.errors %}
-                            <ul>
-                                {% for field in form %}
-                                    {% for error in field.errors %}
-                                        <li class="text-danger">{{ error }}</li>
-                                    {% endfor %}
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        {% include 'base/errors.html' %}
                         <div class="form-floating mb-3">
                             <input class="form-control" id="inputTitle" type="text" name="title" value="{{form.title.value|default_if_none:''}}"/>
                             <label for="inputTitle">Title</label>

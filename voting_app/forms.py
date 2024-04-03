@@ -13,4 +13,11 @@ class CandidateForm(forms.ModelForm):
 
     class Meta:
         model = Candidate
-        fields = ['election', 'name', 'party']
+        fields = ['election', 'name', 'party', 'image']
+
+
+class VoteForm(forms.ModelForm):
+
+    class Meta:
+        model = Vote
+        fields = ['election', 'voter', 'candidate']

@@ -14,7 +14,7 @@
                         <div class="card-body">
                             <form id="activation_form" method="post" action="{% url 'send_activation_view' %}">
                                 {% csrf_token %}
-                                {% include 'pages/messages.html' %}
+                                {% include 'user/messages.html' %}
                                 <div class="form-floating mb-3">
                                     <input class="form-control" id="inputEmail" type="email" name="email" placeholder="name@example.com" />
                                     <label for="inputEmail">Email address</label>

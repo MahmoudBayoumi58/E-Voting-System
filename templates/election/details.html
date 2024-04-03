@@ -1,0 +1,130 @@
+{% extends 'base/main.html' %}
+
+{% block title %}
+    Elections
+{% endblock %}
+
+{% block web_title %}
+    Elections
+{% endblock %}
+
+
+{% block content %}
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Elections</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item active">Elections</li>
+        </ol>
+        <a href="#" onclick="window.history.back();" class="btn btn-dark mb-3">Back</a>
+        <div class="row">
+            {% for candidate in election.candidates.all %}
+                <div class="col-xl-3 col-md-6">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-4">
+                                <img src="{{ candidate.image.url }}" class="img-fluid rounded-start" alt="{{ candidate.name }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ candidate.name }}</h5>
+                                    <p class="card-text">{{ candidate.party }}</p>
+                                    <p class="card-text"><small class="text-muted">Associated Election:</small></p>
+                                    <p class="card-text">Title: {{ candidate.election.title }}</p>
+                                    <p class="card-text">Description: {{ candidate.election.description }}</p>
+                                    <p class="card-text">Start Date: {{ candidate.election.start_date }}</p>
+                                    <p class="card-text">End Date: {{ candidate.election.end_date }}</p>
+                                    <p class="card-text" id="count_{{forloop.counter}}">Number of Voters: {{ candidate.vote_set.count }}</p>
+                                    {% if voted and voted_candidate_id == candidate.id %}
+                                        <a onclick="toggleVote('{{candidate.id}}', '{{forloop.counter}}', 'un-vote')" class="text-decoration-none">
+                                            <button id="unvoteBtn_{{forloop.counter}}" class="btn btn-danger">
+                                                <i class="fas fa-arrow-down"></i> Un-Vote
+                                            </button>
+                                        </a>
+                                    {% elif not voted %}
+                                        <a onclick="toggleVote('{{candidate.id}}', '{{forloop.counter}}', 'vote')" class="text-decoration-none">
+                                            <button id="voteBtn_{{forloop.counter}}" class="btn btn-success">
+                                                <i class="fas fa-arrow-up"></i> Vote
+                                            </button>
+                                        </a>
+                                        <a onclick="toggleVote('{{candidate.id}}', '{{forloop.counter}}', 'un-vote')" class="text-decoration-none">
+                                            <button id="unvoteBtn_{{forloop.counter}}" class="btn btn-danger">
+                                                <i class="fas fa-arrow-down"></i> Un-Vote
+                                            </button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <script>
+        function getCookie(name) {
+            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return cookieValue ? cookieValue.pop() : '';
+        }
+
+        // Function to handle voting or unvoting toggle
+        function toggleVote(candidateId, btnId, action) {
+            debugger;
+            const csrfToken = getCookie('csrftoken');
+            const url = `/vote/v1/${candidateId}/${action}/toggle/`;
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken,
+                },
+                body: JSON.stringify({}),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    Toastify({
+                      text: response.statusText,
+                      className: "alert-danger",
+                      style: {
+                          background: "linear-gradient(to right, #ff4d4d, #ff3333)",
+                          color: "#fff",
+                      },
+                      duration: 3000 // 3 seconds
+                    }).showToast();
+                    return;
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.voted) {
+                    $('#voteBtn_' + btnId).hide();
+                    $('#unvoteBtn_ + btnId').show();
+                    Toastify({
+                      text: data.message,
+                      className: "success",
+                      style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                      },
+                      duration: 3000, // 3 seconds
+                    }).showToast();
+                }
+                else {
+                    $('#voteBtn_' + btnId).show();
+                    $('#unvoteBtn_ + btnId').show();
+                    Toastify({
+                      text: data.message,
+                      className: "success",
+                      style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                      },
+                      duration: 3000, // 3 seconds
+                    }).showToast();
+                }
+                $('#count_' + btnId).text('Number of Voters: ' + data.vote_count);
+            })
+            .catch(error => {
+                // Handle error
+                console.error('Error:', error);
+            });
+        }
+    </script>
+{% endblock %}

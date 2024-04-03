@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from .forms import *
 from globals.email import EmailService
 from voting_app.views import get_elections
-from voting_app.models import Election, Candidate
+from voting_app.models import Election, Candidate, Vote
 
 
 # Create your views here.
@@ -155,7 +155,7 @@ def reset_password(request, code):
 
 @login_required
 def dashboard(request):
-    elections = get_elections(request.user)
+    elections = get_elections()
     context_data = {
         'elections': elections
     }
@@ -174,9 +174,11 @@ def admin_settings(request):
     if user.is_superuser:
         elections = Election.objects.all()
         candidates = Candidate.objects.all()
+        votes = Vote.objects.all()
         context_data = {
             'elections': elections,
-            'candidates': candidates
+            'candidates': candidates,
+            'votes': votes,
         }
         return render(request, 'user/settings.html', context_data)
 

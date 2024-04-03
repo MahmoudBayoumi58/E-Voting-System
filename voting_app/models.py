@@ -15,8 +15,11 @@ class Election(models.Model):
 
 
 class Candidate(models.Model):
-    election = models.ForeignKey(Election, on_delete=models.CASCADE)
+    DEFAULT_IMAGE_PATH = 'candidate/default.png'
+
+    election = models.ForeignKey(Election, on_delete=models.CASCADE, related_name='candidates')
     name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='candidate/', default=DEFAULT_IMAGE_PATH)
     party = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
