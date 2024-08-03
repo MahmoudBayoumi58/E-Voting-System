@@ -69,7 +69,7 @@ Follow these steps to set up the project locally.
 
 ## Project Structure
 
-- **evoting/**: Contains the Django project settings and configuration files.
+- **backend/**: Contains the Django project settings and configuration files.
 - **templates/**: HTML templates for rendering frontend views.
 - **static/**: Static files (CSS, JavaScript, images).
 - **voting/**: Contains the core application files, including models, views, and forms.
